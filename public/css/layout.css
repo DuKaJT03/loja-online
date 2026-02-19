@@ -1,0 +1,49 @@
+/* Fundo geral */
+body {
+    background: #0A1F44;
+    padding: 20px;
+    color: #E3E6EB;
+}
+
+/* Container central */
+.container {
+    max-width: 120px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12pc rgba(255, 255, 255, 0.04);
+}
+
+/* Títulos */
+h1, h2, h3 {
+    color: #8CC5FF;
+    margin-bottom: 20px;
+}
+
+/* Botões */
+.btn, button, input[type="submit"]{
+    background: #4DA3FF;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover, button:hover, input[type="submit"]:hover {
+    background: #8CC5FF;
+}
+
+/* Input */
+input, selectm, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0 16px 0;
+    border-radius: 8px;
+    border: 1px solid #8CC5FF;
+    background: #122c63;
+    color: #fff;
+}
