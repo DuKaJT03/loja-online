@@ -18,7 +18,7 @@ if(!isset($_SESSION['carrinho']) || count($_SESSION['carrinho']) === 0){
 }
 
 $conexao = Conexao::conectar();
-$conexao->begin_transaction();
+$conexao->beginTransaction();
 
 try {
 
@@ -31,15 +31,15 @@ try {
         $stmt = $conexao->prepare(
             "SELECT preco, estoque FROM produtos WHERE id = ?"
         );
-        $stmt->bind_param("i", $item['id']);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+        $stmt->execute([
+            $item['id']
+        ]);
 
-        if($resultado->num_rows !== 1){
+        if($stmt->rowCount() !== 1){
             throw new Exception("Produto inválido.");
         }
 
-        $produto = $resultado->fetch_assoc();
+        $produto = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($produto['estoque'] < $item['quantidade']) {
             throw new Exception("Estoque insuficiente para o produto ID {$item['id']}.");
@@ -54,11 +54,13 @@ try {
         "INSERT INTO pedidos (id_cliente, total, status) 
         VALUES (?, ?, 'pendente')"
     );
-    $stmt_pedido->bind_param("id", $id_cliente, $total);
-    $stmt_pedido->execute();
+    $stmt_pedido->execute([
+        $id_cliente,
+        $total
+    ]);
 
     //Pega o número do pedido que acabou de ser salvo
-    $id_pedido = $stmt_pedido->insert_id; //Pega o último ID que foi criado no banco, esse é o número do pedido
+    $id_pedido = $conexao->lastInsertId(); //Pega o último ID que foi criado no banco, esse é o número do pedido
 
 // Insere cada item na tabela ITENS_PEDIDO e atualiza estoque
     foreach($_SESSION['carrinho'] as $item){//foreach :Percorre cada item do carrinho 
@@ -66,9 +68,10 @@ try {
         $stmt_produto = $conexao->prepare(
             "SELECT preco, estoque FROM produtos WHERE id = ?"
         );
-        $stmt_produto->bind_param("i", $item['id']);
-        $stmt_produto->execute();
-        $produto = $stmt_produto->get_result()->fetch_assoc();
+        $stmt_produto->execute([
+            $item['id']
+        ]);
+        $produto = $stmt_produto->fetch(PDO::FETCH_ASSOC);
 
         $id_produto = $item['id'];
         $quantidade = $item['quantidade'];
@@ -78,21 +81,21 @@ try {
             "INSERT INTO itens_pedido (id_pedido, id_produto, quantidade, preco)
             VALUES (?, ?, ?, ?)"
         );
-        $stmt_item->bind_param(
-            "iiid",
+        $stmt_item->execute([
             $id_pedido,
             $id_produto,
             $quantidade,
             $preco
-        );
-        $stmt_item->execute();
+        ]);
 
         //Atualiza estoque
         $stmt_update = $conexao->prepare(
             "UPDATE produtos SET estoque = estoque - ? WHERE id = ?"
         );
-        $stmt_update->bind_param("ii", $quantidadem, $id_produto);
-        $stmt_update->execute();
+        $stmt_update->execute([
+            $quantidade,
+            $id_produto
+        ]);
     }
 
     //Finaliza tudo
@@ -108,7 +111,5 @@ try {
     $conexao->rollback();
     echo "<p style='color:red;'>Erro ao finalizar compra: {$e->getMessage()}</p>";
 }
-
-$conexao->close();
 
 ?>

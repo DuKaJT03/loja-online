@@ -2,29 +2,35 @@
 
 namespace Jhon\Loja\Database;
 
-use mysqli;
-use Exception;
+use PDO;
+use PDOException;
 
 class Conexao {
     
     public static function conectar() {
 
-        require_once __DIR__ . '/../bootstrap.php';
+        $host = "dpg-d6blg7h5pdvs73b98vmg-a";
+        $db   = "loja_db_s1j9";
+        $user = "loja_db_s1j9_user";
+        $pass = "FoTKMJ4dZW9336AKMGzA5ZfKiZfVIHzg";
+        $port = "5432";
 
-        $servidor = $_ENV['DB_HOST'];
-        $usuario = $_ENV['DB_USER'];
-        $senha = $_ENV['DB_PASS'];
-        $banco = $_ENV['DB_NAME'];
+        $dsn = "pgsql:host=$host;port=$port;dbname=$db";
 
-        $conexao = new mysqli($servidor, $usuario, $senha, $banco);
+        try {
 
-        if ($conexao->connect_error) {
-            throw new Exception("Falha na conexão: " . $conexao->connect_error);
+            $pdo = new PDO($dsn, $user, $pass);
+
+            $pdo->setAttribute(
+                PDO::ATTR_ERRMODE,
+                PDO::ERRMODE_EXCEPTION
+            );
+
+            return $pdo;
+
+        }  catch(PDOExecption $e){
+            die("Erro conexão: ".$e->getMessage());
         }
-
-        $conexao->set_charset("utf8mb4");
-
-        return $conexao;
     }
 }
 
