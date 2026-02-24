@@ -3,7 +3,7 @@
         'name' => 'jhon/loja',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '742a841a20b66e4ecb9095b4fa77cf8da9ad6cec',
+        'reference' => '5b27507f2c043d887c3643cddbda6112f818ac93',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'jhon/loja' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '742a841a20b66e4ecb9095b4fa77cf8da9ad6cec',
+            'reference' => '5b27507f2c043d887c3643cddbda6112f818ac93',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
