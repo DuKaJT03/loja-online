@@ -44,7 +44,7 @@ use Jhon\Loja\Database\Conexao;
         $stmt = $conexao->prepare(
             "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)"
             );
-        $stmt->exeute([
+        $stmt->execute([
             $nome,
             $email,
             $senhaHash,
