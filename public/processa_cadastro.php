@@ -2,7 +2,7 @@
     //Ele não mostra um formulário, ele só processa.
     //Ele pega os dados que vêm do formulário HTML, trata esses dados, valida, insere no banco de dados e dá uma resposta.
 
-require_once __DIR__ . '/../vendor/autoload.php';// chama o arquivo de conexão
+require_once __DIR__ . '/vendor/autoload.php';// chama o arquivo de conexão
 use Jhon\Loja\Database\Conexao;
 
     //Verifica se todos os campos foram enviados corretamente
