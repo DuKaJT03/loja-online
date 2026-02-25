@@ -15,7 +15,7 @@ class Conexao {
         $pass = "FoTKMJ4dZW9336AKMGzA5ZfKiZfVIHzg";
         $port = "5432";
 
-        $dsn = "pgsql:host=$host;port=$port;dbname=$db";
+        $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
 
         try {
 
