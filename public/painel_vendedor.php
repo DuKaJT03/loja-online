@@ -11,19 +11,16 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !='lojista'){
      //Isso faz o navegador sair da página atual e abrir automaticamente o login.html.
     exit;
 }
- $conexao = Conexao::conectar();
+ $pdo = Conexao::conectar();
     $id = $_SESSION['usuario_id'];
     
-    $stmt = $conexao->prepare(
-        "SELECT COUNT(*) as total FROM produtos WHERE id_lojista = ?"
-    );
-    $stmt->bind_param("i", $id);
+    $sql =
+        "SELECT COUNT(*) as total FROM produtos WHERE id_lojista = :id_lojista";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id_lojista', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $resultado = $stmt->get_result();
-    $total = $resultado->fetch_assoc()['total'];
 
-    $stmt->close();
-    $conexao->close();
+    $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 ?>
 
 <!DOCTYPE html>
