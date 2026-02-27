@@ -8,7 +8,7 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'cliente'){
     exit;
 }
 
-$conexao = Conexao::conectar();
+$pdo = Conexao::conectar();
 
 //Captura da categoria (URL)
 $categoria = $_GET['categoria'] ?? '';
@@ -20,30 +20,20 @@ $sql = "
     WHERE estoque > 0
 ";
 
-// Tipos e valores 
-$tipos = '';
-$valores =[];
+$params = [];
 
 // Filtro por categoria (opcional)
 if($categoria !== ''){
-    $sql .= "AND categoria = ?";
-    $tipos .= "s";
-    $valores[] = $categoria;
+    $sql .= "AND categoria = :categoria";
+    $params[':categoria'] = $categoria;
 }
 
 //prepara
-$stmt = $conexao->prepare($sql);
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 
-//Bind dinâmico (se houver parâmetros)
-if(!empty($valores)){
-    $stmt->bind_param($tipos, ...$valores);
-}
+$produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-//Executa
-$stmt->execute();
-
-//$resultado
-$resultado = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -81,8 +71,8 @@ $resultado = $stmt->get_result();
     </tr>
 
 <?php //Listagem
-if($resultado->num_rows > 0){ //Conta quantas linhas vieram do banco
-    while($produto = $resultado->fetch_assoc()){
+if(count($produtos) > 0){ //Conta quantas linhas vieram do banco
+    foreach($produtos as $produto){
         echo "<tr>"; //Começa uma linha da tabela
 
         //Coluna da imagem
@@ -114,6 +104,3 @@ if($resultado->num_rows > 0){ //Conta quantas linhas vieram do banco
 </body>
 </html>
 
-<?php
-$conexao->close();
-?>

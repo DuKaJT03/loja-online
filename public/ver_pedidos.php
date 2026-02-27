@@ -12,18 +12,20 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] != 'cliente'){
 
 $id_cliente = $_SESSION['usuario_id'];
 
-$conexao = Conexao::conectar();
+$pdo = Conexao::conectar();
 
 // Busca todos os pedidos do cliente
-$stmt = $conexao->prepare(
+$sql =
     "SELECT id, data, total, status
     FROM pedidos
-    WHERE id_cliente = ?
-    ORDER BY data DESC"
-);
-$stmt->bind_param("i", $id_cliente);
+    WHERE id_cliente = :id_cliente
+    ORDER BY data DESC
+    ";
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id_cliente', $id_cliente, PDO::PARAM_INT);
 $stmt->execute();
-$resultado = $stmt->get_result();
+
+$pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +42,7 @@ $resultado = $stmt->get_result();
 <a href="painel_cliente.php">Voltar para o painel</a><br><br>
 
 <?php
-if($resultado->num_rows > 0){
+if(count($pedidos) > 0){
     echo "<table border='1' cellpadding='10'>";
     echo "<tr>
             <th>ID do Pedido</th>
@@ -50,7 +52,7 @@ if($resultado->num_rows > 0){
             <th>Ações</th>
          </tr>";
 
-    while($pedido = $resultado->fetch_assoc()){
+    foreach($pedidos as $pedido){
         echo "<tr>
             <td>{$pedido['id']}</td>
             <td>{$pedido['data']}</td>
@@ -67,7 +69,6 @@ if($resultado->num_rows > 0){
     echo "<p>Você ainda não fez nenhum pedido.</p>";
 }
 
-$conexao->close();
 ?>
 
 </body>
