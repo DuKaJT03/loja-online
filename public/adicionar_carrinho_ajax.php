@@ -15,22 +15,24 @@ if(!isset($_POST['id'])){ // 'id' :nome da variável esperada (vinda do JS)
 
 $id = (int) $_POST['id'];
 
-$conexao = Conexao::conectar();
+$pdo = Conexao::conectar();
 
-$stmt = $conexao->prepare(
-    "SELECT id, nome, preco FROM produtos WHERE id = ?"
-);
-$stmt->bind_param("i", $id);
+$sql =
+    "SELECT id, nome, preco 
+    FROM produtos 
+    WHERE id = :id";
+
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
-$resultado = $stmt->get_result();
 
-if($resultado->num_rows !== 1){
+$produto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if(!$produto){
     http_response_code(404);
     echo "Produto não encontrado";
     exit;
 }
-
-$produto = $resultado->fetch_assoc();
 
 if (!isset($_SESSION['carrinho'])){
     $_SESSION['carrinho'] = [];

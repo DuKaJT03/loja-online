@@ -16,17 +16,27 @@ if(!isset($_GET['id'])){//$_GET['id']:captura o valor do ID que veio pela URL(ed
 
 $id_produto = intval($_GET['id']); //intval():Transforma o que veio na URL em número inteiro. (PROTEGE CONTRA SQL INJECTION).
 
+$pdo = Conexao::conectar();
 //Query para buscar o produto
-$sql = "SELECT * FROM produtos WHERE id = $id_produto AND id_lojista = ".$_SESSION['usuario_id'];//Busca o produto com aquele id e que pertença ao lojista logado
-$conexao = Conexao::conectar();
-$resultado = $conexao->query($sql); //Executa a query.
-//Verifica se encontrou 1 produto
-if($resultado->num_rows != 1){
-    echo "Produto não encontrado oou você não tem permissão.";
+$sql = "
+    SELECT * 
+    FROM produtos 
+    WHERE id = :id 
+    AND id_lojista = :lojista
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id', $id_produto, PDO::PARAM_INT);
+$stmt->bindValue(':lojista', $_SESSION['usuario_id'], PDO::PARAM_INT);
+$stmt->execute();
+
+$produto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if(!$produto){
+    echo "Produto não encontrado ou você não tem permissão.";
     exit;
 }
-//pega os dados do produto
-$produto = $resultado ->fetch_assoc();//Transforma em array associativo $produto['nome'],$produto['descricao'],etc.
+
 ?>
 
 <!DOCTYPE html>

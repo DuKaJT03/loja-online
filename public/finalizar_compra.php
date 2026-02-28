@@ -17,8 +17,8 @@ if(!isset($_SESSION['carrinho']) || count($_SESSION['carrinho']) === 0){
     exit;
 }
 
-$conexao = Conexao::conectar();
-$conexao->beginTransaction();
+$pdo = Conexao::conectar();
+$pdo->beginTransaction();
 
 try {
 
@@ -28,12 +28,11 @@ try {
     // Calcula o total REAL (preço vem do banco)
     foreach($_SESSION['carrinho'] as $item){
 
-        $stmt = $conexao->prepare(
-            "SELECT preco, estoque FROM produtos WHERE id = ?"
+        $stmt = $pdo->prepare(
+            "SELECT preco, estoque FROM produtos WHERE id = :id"
         );
-        $stmt->execute([
-            $item['id']
-        ]);
+        $stmt->bindValue(':id', $item['id'], PDO::PARAM_INT);
+        $stmt->execute();
 
         if($stmt->rowCount() !== 1){
             throw new Exception("Produto inválido.");
@@ -52,12 +51,11 @@ try {
     // Insere na tabela PEDIDOS - Cria o pedido
     $stmt_pedido = $conexao->prepare(
         "INSERT INTO pedidos (id_cliente, total, status) 
-        VALUES (?, ?, 'pendente')"
+        VALUES (:cliente, :total, 'pendente')"
     );
-    $stmt_pedido->execute([
-        $id_cliente,
-        $total
-    ]);
+    $stmt_pedido->bindValue(':cliente', $id_cliente, PDO::PARAM_INT);
+    $stmt_pedido->bindValue(':total', $total);
+    $stmt_pedido->execute();
 
     //Pega o número do pedido que acabou de ser salvo
     $id_pedido = $conexao->lastInsertId(); //Pega o último ID que foi criado no banco, esse é o número do pedido
@@ -77,29 +75,32 @@ try {
         $quantidade = $item['quantidade'];
         $preco = $produto['preco'];
 
-        $stmt_item = $conexao->prepare(
-            "INSERT INTO itens_pedido (id_pedido, id_produto, quantidade, preco)
-            VALUES (?, ?, ?, ?)"
+        $stmt_item = $pdo->prepare(
+            "INSERT INTO itens_pedido 
+            (id_pedido, id_produto, quantidade, preco)
+            VALUES (:pedido, :produto, :qtd, :preco)"
         );
-        $stmt_item->execute([
-            $id_pedido,
-            $id_produto,
-            $quantidade,
-            $preco
-        ]);
+        $stmt_item->bindValue(':pedido', $id_pedido, PDO::PARAM_INT);
+        $stmt_item->bindValue(':produto', $id_produto, PDO::PARAM_INT);
+        $stmt_item->bindValue(':qtd', $quantidade, PDO::PARAM_INT);
+        $stmt_item->bindValue(':preco', $preco);
+
+        $stmt_item->execute();
 
         //Atualiza estoque
-        $stmt_update = $conexao->prepare(
-            "UPDATE produtos SET estoque = estoque - ? WHERE id = ?"
+        $stmt_update = $pdo->prepare(
+            "UPDATE produtos 
+            SET estoque = estoque - :qtd 
+            WHERE id = :produto"
         );
-        $stmt_update->execute([
-            $quantidade,
-            $id_produto
-        ]);
+        $stmt_update->bindValue(':qtd', $quantidade, PDO::PARAM_INT);
+        $stmt_update->bindValue(':produto', $id_produto, PDO::PARAM_INT);
+
+        $stmt_update->execute();
     }
 
     //Finaliza tudo
-    $conexao->commit();
+    $pdo->commit();
     unset($_SESSION['carrinho']);
 
     echo "<p style='color:green;'>Compra finaliza com sucesso! Pedido nº $id_pedido</p>";
@@ -108,7 +109,7 @@ try {
 
 }catch (Exception $e){
     
-    $conexao->rollback();
+    $pdo->rollback();
     echo "<p style='color:red;'>Erro ao finalizar compra: {$e->getMessage()}</p>";
 }
 
