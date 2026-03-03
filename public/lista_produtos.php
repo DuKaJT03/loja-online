@@ -14,37 +14,26 @@ $lojista_id = $_SESSION['usuario_id'];
 //captura da busca (vem da URL)
 $busca = $_GET['busca'] ?? '';
 
-$conexao = Conexao::conectar();
+$pdo = Conexao::conectar();
 //SQL base (NUNCA concatenar variável direto)
 $sql = "
     SELECT id, nome, descricao, preco, imagem 
     FROM produtos 
-    WHERE id_lojista = ?
+    WHERE id_lojista = :lojista
     ";
-
-// Tipos e valores para o bind 
-$tipos = "i";
-$valores = [$lojista_id];
+$params = [
+    ':lojista' =>$lojista_id
+];
 
 // Se houver busca, adiciona condição
 if ($busca !== ''){
-    $sql .= "AND (nome LIKE ? OR descricao LIKE ?)";
-    $tipos .= "ss";
-    $valores[] = "%$busca%";
-    $valores[] = "%$busca%";
+    $sql .= "AND (nome ILIKE :busca OR descricao ILIKE :busca)";
+    $params[':busca'] = "%$busca%";
 }
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 
-// Prepara a query
-$stmt = $conexao->prepare($sql);
-
-// Bind dinâmico dos parâmetros
-$stmt->bind_param($tipos, ...$valores);
-
-//executa
-$stmt->execute();
-
-//Resultado
-$resultado = $stmt->get_result();
+$produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -86,9 +75,9 @@ if(isset($_GET['mensagem'])){//Verifica se existe na URL um parâmetro chamado m
 
 <?php
 //Percorre todos os produtos e gera as linhas da tabela
-if($resultado->num_rows > 0){//num_rows: quantidade de linhas retornas pela coluna
+if(count($produtos) > 0){//num_rows: quantidade de linhas retornas pela coluna
    //Enquanto houver produtos, ele pega cada um.
-    while ($produto = $resultado->fetch_assoc()){//fetch_assoc():Transforma cada linha em um ARRAY ASSOCIATIVO, onde os índices são os nomes do campos do banco
+    foreach ($produtos as $produto){//fetch_assoc():Transforma cada linha em um ARRAY ASSOCIATIVO, onde os índices são os nomes do campos do banco
         echo "<tr>";
         echo "<td>".$produto['id']."</td>";//<td> Cria cada célula na linha
         echo "<td>".$produto['nome']. "</td>";//valor da coluna nome daquele produto
@@ -115,7 +104,3 @@ if($resultado->num_rows > 0){//num_rows: quantidade de linhas retornas pela colu
 
 </body>
 </html>
-
-<?php
-$conexao->close();
-?>

@@ -14,15 +14,14 @@ use Jhon\Loja\Database\Conexao;
         $tipo = $_POST['tipo'];
         $confirmar_senha = $_POST['confirmar_senha'];
 
-        $conexao = Conexao::conectar();
+        $pdo = Conexao::conectar();
         
         //Verifica se e-mail já existe 
-        $verifica = $conexao->prepare(
-            "SELECT id FROM usuarios WHERE email = ?"
+        $verifica = $pdo->prepare(
+            "SELECT id FROM usuarios WHERE email = :email"
             );
-        $verifica->execute([
-            $email
-        ]);
+        $verifica->bindValue(':email', $email);
+        $verifica->execute();
 
         if($verifica->rowCount() > 0){
             echo "<p class='erro'>E-mail já cadastrado. Use outro. </p>";
@@ -36,23 +35,19 @@ use Jhon\Loja\Database\Conexao;
         //Criptografa a senha
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-        //Inserindo no banco de dados (INSEGURO)
-        //$sql = "INSERT INTO usuarios (nome, email, senha, tipo)VALUES ('$nome', '$email', '$senha', '$tipo')";
-        //if($conexao->query($sql)===TRUE){
-
         //Insere usuário
-        $stmt = $conexao->prepare(
-            "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)"
+        $stmt = $pdo->prepare(
+            "INSERT INTO usuarios (nome, email, senha, tipo) 
+            VALUES (:nome, :email, :senha, :tipo)"
             );
-        $stmt->execute([
-            $nome,
-            $email,
-            $senhaHash,
-            $tipo
-        ]);
-            echo "<p style='color:green;'>Usuário cadastrado com sucesso!</p>";
-            echo "<a href='login.html'>Ir para o Login</a>";
-    }else{
-        Header('Location: index.html');
-        exit;
+        
+        $stmt->bindValue(':nome', $nome);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':senha', $senhaHash);
+        $stmt->bindValue(':tipo', $tipo);
+
+        $stmt->execute();
+
+        echo "<p style='color:green;'>Usuário cadastrado com sucesso!</p>";
+        echo "<a href='login.html'>Ir para o Login</a>";
     }

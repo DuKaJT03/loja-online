@@ -19,38 +19,37 @@ if(!isset($_GET['id'])){
 $id_pedido = intval($_GET['id']);
 $id_cliente = $_SESSION['usuario_id'];
 
-$conexao = Conexao::conectar();
+$pdo = Conexao::conectar();
 
 //Verifica se o pedido pertence ao cliente
-$stmt_pedido = $conexao->prepare(
+$stmt_pedido = $pdo->prepare(
     "SELECT id, data, total
     FROM pedidos
-    WHERE id = ? AND id_cliente = ?"
+    WHERE id = :id_cliente AND id_cliente = :cliente"
 );
-$stmt_pedido->bind_param("ii", $id_pedido, $id_cliente);
+$stmt_pedido->bindValue(':pedido', $id_pedido, PDO::PARAM_INT);
+$stmt_pedido->bindValue(':cliente', $id_cliente, PDO::PARAM_INT);
 $stmt_pedido->execute();
-$resultado_pedido = $stmt_pedido->get_result();
 
-if($resultado_pedido->num_rows !== 1){
+$pedido = $stmt_pedido->fetch(PDO::FETCH_ASSOC);
+
+if(!$pedido){
     echo "Pedido não encontrado ou acesso negado.";
     exit;
 }
 
-$pedido = $resultado_pedido->fetch_assoc();
-
 // Busca os itens do pedido
-$stmt_itens = $conexao->prepare(
+$stmt_itens = $pdo->prepare(
     "SELECT i.quantidade, i.preco, p.nome        
     FROM itens_pedido i
     INNER JOIN produtos p ON p.id = i.id_produto
-    WHERE i.id_pedido = ?"
+    WHERE i.id_pedido = :pedido"
 );
-if(!$stmt_itens){
-    die("Erro no prepare: " . $conexao->error);
-}
-$stmt_itens->bind_param("i", $id_pedido);
+
+$stmt_itens->bindValue(':pedido', $id_pedido, PDO::PARAM_INT);
 $stmt_itens->execute();
-$resultado_itens = $stmt_itens->get_result();
+
+$itens = $stmt_itens->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -77,8 +76,8 @@ $resultado_itens = $stmt_itens->get_result();
 <?php
 $total = 0;
 
-if($resultado_itens->num_rows > 0){
-    while($item = $resultado_itens->fetch_assoc()){
+if(count($itens) > 0){
+    foreach($itens as $item){
         $subtotal = $item['preco'] * $item['quantidade'];
         $total += $subtotal;
 
@@ -102,5 +101,3 @@ if($resultado_itens->num_rows > 0){
 
 </body>
 </html>
-
-<?php $conexao->close();?>

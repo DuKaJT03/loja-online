@@ -63,25 +63,28 @@ if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0){
         exit();
     }
 }
-/*
-// Insere no banco (INSEGURO)
-$sql = "INSERT INTO produtos (id_lojista, nome, descricao, preco, imagem, estoque)
-        VALUES ('{$_SESSION['usuario_id']}', '$nome', '$descricao', '$preco', '$nome_imagem', '$estoque')";//O ID do lojista que está cadastrando(pega da sessão).
-        if($conexao->query($sql) == TRUE){//Executa a query no banco
-        */
 //Cadastro Insere no banco (SEGURO)Prepared Statement
-$conexao = Conexao::conectar();
-$stmt = $conexao->prepare("INSERT INTO produtos (id_lojista, nome, descricao, preco, imagem, estoque, categoria) VALUES (?, ?, ?, ?, ?, ?, ?)");//$stmt= Cria uma variével chamada stmt que guarda o statement preparado
-//$conexao->prepare() Método que prepara o comando SQL com parâmetros ? que serão preenchidos depois, ? espaços reservados para os dados
-$stmt->bind_param("issdsis", $id_lojista, $nome, $descricao, $preco, $nome_imagem, $estoque, $categoria); //$stmt->bind_param("ssdsi", Faz a ligação doso dados nas interrogações do SQL. O "ssdsi" indica os tipos dos dados.(ssdsi: String(nome, descricao, imagem) Double(preco) Inteiro(id_lojista))
+$pdo = Conexao::conectar();
+$stmt = $pdo->prepare("
+    INSERT INTO produtos 
+    (id_lojista, nome, descricao, preco, imagem, estoque, categoria) 
+    VALUES 
+    (:lojista, :nome, :descricao, :preco, :imagem, :estoque, :categoria)
+");//$stmt= Cria uma variével chamada stmt que guarda o statement preparado
+
+$stmt->bindValue(':lojista', $id_lojista, PDO::PARAM_INT);
+$stmt->bindValue(':nome', $nome);
+$stmt->bindValue(':descricao', $descricao);
+$stmt->bindValue(':preco', $preco);
+$stmt->bindValue(':imagem', $nome_imagem);
+$stmt->bindValue(':estoque', $estoque, PDO::PARAM_INT);
+$stmt->bindValue(':categoria', $categoria);
 
 if($stmt->execute()){//Executa a query no banco
     header("Location: lista_produtos.php?mensagem=Produto cadastrado com sucesso");
     exit;
 }else{
-    echo "Erro ao cadastrar produto: " . $stmt->error;
+    echo "Erro ao cadastrar produto.";
 }
-
-$conexao->close();
 
 ?>

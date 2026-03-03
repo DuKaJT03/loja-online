@@ -11,10 +11,10 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] != 'lojista'){
 }
 
 $id_lojista = $_SESSION['usuario_id'];
-$conexao = Conexao::conectar();
+$pdo = Conexao::conectar();
 
 //prepare
-$stmt = $conexao->prepare(
+$stmt = $pdo->prepare(
     "SELECT
         pe.id AS pedido_id,
         pe.data,
@@ -27,19 +27,15 @@ $stmt = $conexao->prepare(
     INNER JOIN produtos pr ON pr.id = i.id_produto
     INNER JOIN pedidos pe ON pe.id = i.id_pedido
     INNER JOIN usuarios u ON u.id = pe.id_cliente
-    WHERE pr.id_lojista = ?
+    WHERE pr.id_lojista = :lojista
     ORDER BY pe.data DESC"
 );
 
-if(!$stmt){
-    die("Erro no prepare: " . $conexao->error);
-}
-
 //BIND 
-$stmt->bind_param("i", $id_lojista);
+$stmt->bindValue(':lojista', $id_lojista, PDO::PARAM_INT);
 $stmt->execute();
-$resultado = $stmt->get_result();
 
+$vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +58,7 @@ $resultado = $stmt->get_result();
     </tr>
 
     <?php
-    while($row = $resultado->fetch_assoc()){
+    foreach($vendas as $row){
         echo "<tr>
                 <td>{$row['pedido_id']}</td>
                 <td>{$row['data']}</td>

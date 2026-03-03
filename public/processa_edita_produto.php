@@ -34,17 +34,26 @@ if(//verifica se todos os campos vierom no formulário
         exit;
     }
 
+    $pdo = Conexao::conectar();
     //Busca imagem atual
-    $sql="SELECT imagem FROM produtos WHERE id = $id AND id_lojista= ".$_SESSION['usuario_id'];
-    $conexao = Conexao::conectar();
-    $resultado = $conexao->query($sql);
+    $stmt = $pdo->prepare("
+        SELECT imagem
+        FROM produtos
+        WHERE id = :id
+        AND id_lojista = :lojista
+    ");
 
-    if($resultado->num_rows != 1){
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':lojista', $_SESSION['usuario_id'], PDO::PARAM_INT);
+    $stmt->execute();
+
+    $produto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if(!$produto){
         echo "Produto não encontrado ou sem permissão.";
         exit;
     }
-    //Pega os dados atuais do produto
-     $produto = $resultado->fetch_assoc();//Transforma em array associativo
+
      $imagem= $produto['imagem'];//Guarda o caminho atual da imagem
 
      //Verifica se foi enviado uma nova imagem
@@ -88,40 +97,35 @@ if(//verifica se todos os campos vierom no formulário
         }
     }
 
-/*
-    //Atualização dos dados no banco (Forma insegura)
-    $sql = "UPDATE produtos SET
-                nome = '$nome',--Atualiza a coluna nome com valor da variavel $nome
-                descricao = '$descricao',
-                preco = $preco,--sem aspas porque é numérico
-                imagem = '$imagem'--Atualiza ou mantem a antiga
-            WHERE id =$id AND id_lojista = ".$_SESSION['usuario_id']; /*Garante que o lojista só pode alterar produtos que são dele.*/
-            /*WHERE id=$id :Só atualiza o produto cujo id é igual ao fornecido*/ 
- /*       if($conexao->query($sql)===TRUE){/*Sea atualização for bem sucedida*/
-            //echo "Produto atualizado com sucesso!";
-            //echo "<br><a href='lista_produto.php'>Voltar</a>";
-  /*      }else{
-            echo "Erro ao atualizar: ".$conexao->error;
-        }*/
+    $stmt = $pdo->prepare("
+        UPDATE produtos 
+        SET nome = :nome, 
+            descricao = :descricao, 
+            preco = :preco, 
+            imagem = :imagem, 
+            estoque = :estoque 
+        WHERE id = :id 
+        AND id_lojista = :lojista
+        ");
 
-    $stmt = $conexao->prepare("UPDATE produtos SET nome = ?, descricao = ?, preco = ?, imagem = ?, estoque = ? 
-                           WHERE id = ? AND id_lojista = ?");
-
-    $stmt->bind_param("ssdssii", $nome, $descricao, $preco, $imagem, $estoque, $id, $_SESSION['usuario_id']);
+    $stmt->bindValue(':nome', $nome);
+    $stmt->bindValue(':descricao', $descricao);
+    $stmt->bindValue(':preco', $preco);
+    $stmt->bindValue(':imagem', $imagem);
+    $stmt->bindValue(':estoque', $estoque, PDO::PARAM_INT);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':lojista', $_SESSION['usuario_id'], PDO::PARAM_INT);
 
     if($stmt->execute()){
         echo "<p style='color:green;'>Produto atualizado com sucesso!</p>";
         echo "<a href='lista_produtos.php'>Voltar</a>";
     } else {
-        echo "<p style='color:red;'>Erro ao atualizar: " . $stmt->error . "</p>";
+        echo "<p style='color:red;'>Erro ao atualizar.</p>";
         echo "<a href='lista_produtos.php'>Voltar</a>";
     }
-
-    $stmt->close();
 
 }else{
     echo "Todos os campos são obrigatórios.";
 }
 
-$conexao->close();
 ?>
