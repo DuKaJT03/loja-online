@@ -49,7 +49,7 @@ try {
     }
 
     // Insere na tabela PEDIDOS - Cria o pedido
-    $stmt_pedido = $conexao->prepare(
+    $stmt_pedido = $pdo->prepare(
         "INSERT INTO pedidos (id_cliente, total, status) 
         VALUES (:cliente, :total, 'pendente')"
     );
