@@ -25,7 +25,7 @@ $pdo = Conexao::conectar();
 $stmt_pedido = $pdo->prepare(
     "SELECT id, data, total
     FROM pedidos
-    WHERE id = :id_cliente AND id_cliente = :cliente"
+    WHERE id = :pedido AND id_cliente = :cliente"
 );
 $stmt_pedido->bindValue(':pedido', $id_pedido, PDO::PARAM_INT);
 $stmt_pedido->bindValue(':cliente', $id_cliente, PDO::PARAM_INT);
