@@ -34,7 +34,10 @@ try {
     foreach($_SESSION['carrinho'] as $item){
 
         $stmt = $pdo->prepare(
-            "SELECT preco, estoque FROM produtos WHERE id = :id"
+            "SELECT preco, estoque 
+            FROM produtos 
+            WHERE id = :id 
+            FOR UPDATE"
         );
         $stmt->bindValue(':id', $item['id'], PDO::PARAM_INT);
         $stmt->execute();
@@ -75,7 +78,7 @@ try {
     foreach($produtosCarrinho as $item){//foreach :Percorre cada item do carrinho 
 
         $stmt_item = $pdo->prepare(
-            "SELECT itens_pedido 
+            "INSERT INTO itens_pedido 
             (id_pedido, id_produto, quantidade, preco)
             VALUES (:pedido, :produto, :qtd, :preco)"
         );
@@ -89,29 +92,6 @@ try {
         $stmt_update = $pdo->prepare(
             "UPDATE produtos
             SET estoque = estoque - :qtd
-            WHERE id = :produto"
-        );
-
-        $id_produto = $item['id'];
-        $quantidade = $item['quantidade'];
-        $preco = $produto['preco'];
-
-        $stmt_item = $pdo->prepare(
-            "INSERT INTO itens_pedido 
-            (id_pedido, id_produto, quantidade, preco)
-            VALUES (:pedido, :produto, :qtd, :preco)"
-        );
-        $stmt_item->bindValue(':pedido', $id_pedido, PDO::PARAM_INT);
-        $stmt_item->bindValue(':produto', $id_produto, PDO::PARAM_INT);
-        $stmt_item->bindValue(':qtd', $quantidade, PDO::PARAM_INT);
-        $stmt_item->bindValue(':preco', $preco);
-
-        $stmt_item->execute();
-
-        //Atualiza estoque
-        $stmt_update = $pdo->prepare(
-            "UPDATE produtos 
-            SET estoque = estoque - :qtd 
             WHERE id = :produto"
         );
 
