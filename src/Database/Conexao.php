@@ -9,10 +9,10 @@ class Conexao {
     
     public static function conectar() {
 
-        $host = "dpg-d6blg7h5pdvs73b98vmg-a";
-        $db   = "loja_db_s1j9";
-        $user = "loja_db_s1j9_user";
-        $pass = "FoTKMJ4dZW9336AKMGzA5ZfKiZfVIHzg";
+        $host = "dpg-d7ogjqipmmbs73fbiojg-a.ohio-postgres.render.com";
+        $db   = "loja_db_r2m8";
+        $user = "loja_db_r2m8_user";
+        $pass = "aSL8vddJqloUuuyYXcPoZKgCORvX2pdc";
         $port = "5432";
 
         $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
@@ -28,7 +28,7 @@ class Conexao {
 
             return $pdo;
 
-        }  catch(PDOExecption $e){
+        }  catch(PDOException $e){
             die("Erro conexão: ".$e->getMessage());
         }
     }
