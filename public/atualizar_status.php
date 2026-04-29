@@ -9,20 +9,20 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] != 'lojista'){
 }
 
 $id_lojista = $_SESSION['usuario_id'];
-$id_pedido = intval($_POST['id']);
+$id_item = intval($_POST['id']);
 $status = $_POST['status'];
 
 $pdo = Conexao::conectar();
 
+// Atualiza SOMENTE o item que pertence ao lojista
 $sql =
-    "UPDATE pedidos
+    "UPDATE itens_pedido i
     SET status = :status
-    WHERE id = :id_pedido
+    WHERE i.id = :id_item
     AND EXISTS (
         SELECT 1
-        FROM itens_pedido i
-        INNER JOIN produtos p ON p.id = i.id_produto
-        WHERE i.id_pedido = pedidos.id
+        FROM produtos p
+        WHERE p.id = i.id_produto
         AND p.id_lojista = :id_lojista
     )
 ";
@@ -30,7 +30,7 @@ $sql =
 $stmt = $pdo->prepare($sql);
 
 $stmt->bindValue(':status', $status);
-$stmt->bindValue(':id_pedido', $id_pedido, PDO::PARAM_INT);
+$stmt->bindValue(':id_item', $id_item, PDO::PARAM_INT);
 $stmt->bindValue(':id_lojista', $id_lojista, PDO::PARAM_INT);
 
 $stmt->execute();

@@ -16,13 +16,15 @@ $pdo = Conexao::conectar();
 //prepare
 $stmt = $pdo->prepare(
     "SELECT
+        i.id AS id_item,
         pe.id AS pedido_id,
         pe.data,
-        pe.status,
+        pe.status AS status_pedido,
         u.nome AS cliente,
         pr.nome AS produto,
         i.quantidade,
-        i.preco
+        i.preco,
+        i.status AS status_item
     FROM itens_pedido i
     INNER JOIN produtos pr ON pr.id = i.id_produto
     INNER JOIN pedidos pe ON pe.id = i.id_pedido
@@ -66,11 +68,11 @@ $vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td>{$row['produto']}</td>
                 <td>{$row['quantidade']}</td>
                 <td>R$ ".number_format($row['preco'],2,',','.')."</td>
-                <td>{$row['status']}</td>
+                <td>{$row['status_item']}</td>
                 <td>
-                    <button class='aprovar' data-id='{$row['pedido_id']}'>Aprovar</button>
-                    <button class='cancelar' data-id='{$row['pedido_id']}'>Cancelar</button>
-                    <button class='enviar' data-id='{$row['pedido_id']}'>Enviar</button>
+                    <button class='aprovar' data-id='{$row['id_item']}'>Aprovar</button>
+                    <button class='cancelar' data-id='{$row['id_item']}'>Cancelar</button>
+                    <button class='enviar' data-id='{$row['id_item']}'>Enviar</button>
                 </td>
             </tr>";
     }
