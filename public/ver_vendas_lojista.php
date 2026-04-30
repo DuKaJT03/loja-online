@@ -61,76 +61,69 @@ $vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <?php
     foreach($vendas as $row){
-        echo "<tr>
+        echo "
+            <tr id='linha-{$row['id_item']}'>
                 <td>{$row['pedido_id']}</td>
                 <td>{$row['data']}</td>
                 <td>{$row['cliente']}</td>
                 <td>{$row['produto']}</td>
                 <td>{$row['quantidade']}</td>
                 <td>R$ ".number_format($row['preco'],2,',','.')."</td>
-                <td>{$row['status_item']}</td>
+                <td id='status-{$row['id_item']}'>{$row['status_item']}</td>
                 <td>
                     <button class='aprovar' data-id='{$row['id_item']}'>Aprovar</button>
                     <button class='cancelar' data-id='{$row['id_item']}'>Cancelar</button>
                     <button class='enviar' data-id='{$row['id_item']}'>Enviar</button>
                 </td>
-            </tr>";
+            </tr>
+        ";
     }
     ?>
 </table>
 <script>
 
+function atualizarStatus(botao, novoStatus){
+
+    let id = botao.dataset.id;
+
+    fetch("atualizar_status.php", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        body: "id="+id+"&status="+novoStatus
+    })
+    .then(res => res.text())
+    .then(resposta => {
+    
+        if(resposta.trim() === "ok"){
+        
+            //Atualiza o texto do status na tela
+            document.getElementById("status-"+id).innerText = novoStatus;
+        
+        }else{
+            alert("Erro ao atualizar status");
+        }
+            
+    });
+}
+
+//Eventos
 document.querySelectorAll(".aprovar").forEach(btn => {
     btn.addEventListener("click", function(){
-
-        let id = this.dataset.id;
-
-        fetch("atualizar_status.php", {
-            method: "POST",
-            headers: {
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            body: "id="+id+"&status=aprovado"
-        })
-        .then(res => res.text())
-        .then(r => location.reload());
-
+        atualizarStatus(this, "aprovado");
     });
 });
 
 document.querySelectorAll(".cancelar").forEach(btn => {
     btn.addEventListener("click", function(){
-
-        let id = this.dataset.id;
-
-        fetch("atualizar_status.php", {
-            method: "POST",
-            headers: {
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            body: "id="+id+"&status=cancelado"
-        })
-        .then(res => res.text())
-        .then(r => location.reload());
-
+        atualizarStatus(this, "cancelado");
     });
 });
 
 document.querySelectorAll(".enviar").forEach(btn => {
     btn.addEventListener("click", function(){
-
-        let id = this.dataset.id;
-
-        fetch("atualizar_status.php", {
-            method: "POST",
-            headers: {
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            body: "id="+id+"&status=enviado"
-        })
-        .then(res => res.text())
-        .then(r => location.reload());
-
+        atualizarStatus(this, "enviado");
     });
 });
 
