@@ -99,8 +99,15 @@ function atualizarStatus(botao, novoStatus){
         if(resposta.trim() === "ok"){
         
             //Atualiza o texto do status na tela
-            document.getElementById("status-"+id).innerText = novoStatus;
-        
+            let el = document.getElementById("status-"+id);
+
+            el.innerText = novoStatus;
+            el.style.fontWeight = "bold";
+
+            if(novoStatus === "aprovado") el.style.color = "green";
+            if(novoStatus === "cancelado") el.style.color = "red";
+            if(novoStatus === "enviado") el.style.color = "blue";
+
         }else{
             alert("Erro ao atualizar status");
         }
