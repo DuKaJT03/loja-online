@@ -1,22 +1,48 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
 th {
-    background: #4DA3FF;
-    color: white;
-    padding: 12px;
+    background: linear-gradient(135deg, #4DA3FF, #2a6fc2);
+    padding: 14px;
 }
 
 td {
     padding: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tr{
+    transition: 0.2s;
 }
 
 tr:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.status{
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.aprovado{
+    background: rgba(0,230,118,0.2);
+    color: var(--success);
+}
+
+.cancelado{
+    background: rgba(255,82,82,0.2);
+    color: var(--danger);
+}
+
+.enviado{
+    background: rgba(255,193,7,0.2);
+    color: var(--warning);
 }
 
 @media (max-width: 760px) {

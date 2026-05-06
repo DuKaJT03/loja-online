@@ -46,6 +46,7 @@ $vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Vendas</title>
 </head>
 <body>
+    <div id="toast"></div>
 <!-- TABELA -->
 <table border="1">
     <tr>
@@ -69,8 +70,9 @@ $vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td>{$row['produto']}</td>
                 <td>{$row['quantidade']}</td>
                 <td>R$ ".number_format($row['preco'],2,',','.')."</td>
-                <td id='status-{$row['id_item']}'>{$row['status_item']}</td>
-                <td>
+                <td id='status-{$row['id_item']}' class='status {$row['status_item']}'>
+                    {$row['status_item']}
+                </td>
                     <button class='aprovar' data-id='{$row['id_item']}'>Aprovar</button>
                     <button class='cancelar' data-id='{$row['id_item']}'>Cancelar</button>
                     <button class='enviar' data-id='{$row['id_item']}'>Enviar</button>
@@ -92,6 +94,12 @@ function atualizarStatus(botao, novoStatus){
             "Content-Type":"application/x-www-form-urlencoded"
         },
         body: "id="+id+"&status="+novoStatus
+
+        if(resposta.trim() === "ok"){
+            mostrarToast("Status atualizando!");
+        }else{
+            mostrarToast("Erro ao atualizar!");
+        }
     })
     .then(res => res.text())
     .then(resposta => {
@@ -102,11 +110,12 @@ function atualizarStatus(botao, novoStatus){
             let el = document.getElementById("status-"+id);
 
             el.innerText = novoStatus;
-            el.style.fontWeight = "bold";
+            
+            //remove classes antigas
+            el.classList.remove("aprovado", "cancelado", "enviado");
 
-            if(novoStatus === "aprovado") el.style.color = "green";
-            if(novoStatus === "cancelado") el.style.color = "red";
-            if(novoStatus === "enviado") el.style.color = "blue";
+            //adiciona nova classe
+            el.classList.add(novoStatus);
 
         }else{
             alert("Erro ao atualizar status");
@@ -133,6 +142,16 @@ document.querySelectorAll(".enviar").forEach(btn => {
         atualizarStatus(this, "enviado");
     });
 });
+
+function mostrarToast(msg){
+    let toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+
+    setTimeout(() =>{
+        toast.classList.remove("show");
+    }, 2000);
+}
 
 </script>
 </body>
