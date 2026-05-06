@@ -73,6 +73,7 @@ $vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td id='status-{$row['id_item']}' class='status {$row['status_item']}'>
                     {$row['status_item']}
                 </td>
+                <td>
                     <button class='aprovar' data-id='{$row['id_item']}'>Aprovar</button>
                     <button class='cancelar' data-id='{$row['id_item']}'>Cancelar</button>
                     <button class='enviar' data-id='{$row['id_item']}'>Enviar</button>
@@ -94,12 +95,6 @@ function atualizarStatus(botao, novoStatus){
             "Content-Type":"application/x-www-form-urlencoded"
         },
         body: "id="+id+"&status="+novoStatus
-
-        if(resposta.trim() === "ok"){
-            mostrarToast("Status atualizando!");
-        }else{
-            mostrarToast("Erro ao atualizar!");
-        }
     })
     .then(res => res.text())
     .then(resposta => {
@@ -113,12 +108,13 @@ function atualizarStatus(botao, novoStatus){
             
             //remove classes antigas
             el.classList.remove("aprovado", "cancelado", "enviado");
-
             //adiciona nova classe
             el.classList.add(novoStatus);
 
+            mostrarToast("Status atualizado!");
+
         }else{
-            alert("Erro ao atualizar status");
+            alert("Erro ao atualizar");
         }
             
     });
