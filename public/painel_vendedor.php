@@ -28,7 +28,10 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !='lojista'){
 <head>
     <meta charset="UTF-8">
     <title>Painel do Vendedor</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
     <h1>Bem-vindo, Vendedor <?php echo $_SESSION['usuario_nome']; ?>!</h1>
