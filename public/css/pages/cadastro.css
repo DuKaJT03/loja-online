@@ -1,12 +1,17 @@
 /* =====================================
-   PÁGINA LOGIN
+   PÁGINA CADASTRO
 ===================================== */
 
-.login-page{
+.cadastro-page{
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     min-height: 100vh;
+
     padding: 2rem;
 }
 
@@ -14,35 +19,43 @@
    CONTAINER
 ===================================== */
 
-.login-container{
+.cadastro-container{
+
     width: 100%;
-    max-width: 5500px;
+
+    max-width: 700px;
 }
 
 /* =====================================
-   CARD LOGIN
+   CARD
 ===================================== */
 
-.login-box{
+.cadastro-box{
 
-    background: var(--bg-card);
-    border:1px solid var(--border);
-    border-radius:var(--radius-lg);
-    padding:2rem;
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition);
-    animation: fadeUp .5s ease;
-}
+    background:
+        var(--bg-card);
 
-.login-box:hover{
-    transform: translateY(-3px);
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    padding:
+        2rem;
+
+    box-shadow:
+        var(--shadow-lg);
+
+    animation:
+        fadeUp .5s ease;
 }
 
 /* =====================================
    TÍTULO
 ===================================== */
 
-.login-box h1{
+.cadastro-box h1{
 
     text-align: center;
 
@@ -53,7 +66,7 @@
    SUBTÍTULO
 ===================================== */
 
-.login-box p{
+.cadastro-box p{
 
     text-align: center;
 
@@ -61,10 +74,10 @@
 }
 
 /* =====================================
-   FORMULÁRIO
+   FORM
 ===================================== */
 
-.login-form{
+.cadastro-box form{
 
     display: flex;
 
@@ -73,38 +86,42 @@
     gap: 1rem;
 }
 
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.form-group:not(:last-child){
+    margin-bottom: 1rem;
+}
+
 /* =====================================
    BOTÃO
 ===================================== */
 
-.login-form button{
+.cadastro-box button{
 
     width: 100%;
 
     margin-top: .5rem;
 }
 
-/* =====================================
-   LINK CADASTRO
-===================================== */
-
-.cadastro-link{
-
+.login-link{
     text-align: center;
-
     margin-top: 1rem;
 }
-
-.cadastro-link a{
-
+.login-link a{
     font-weight: 600;
 }
+/* =====================================
+   ANIMAÇÃO
+===================================== */
 
 @keyframes fadeUp{
 
     from{
 
-        opacity:0;
+        opacity: 0;
 
         transform:
             translateY(20px);
@@ -112,7 +129,7 @@
 
     to{
 
-        opacity:1;
+        opacity: 1;
 
         transform:
             translateY(0);

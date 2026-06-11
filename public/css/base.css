@@ -1,0 +1,188 @@
+/* =====================================
+   BODY
+===================================== */
+
+body{
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(59,130,246,.15),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at top right,
+            rgba(59,130,246,.10),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            var(--bg),
+            #020617
+        );
+
+    color:
+        var(--text);
+
+    min-height:
+        100vh;
+
+    line-height:
+        1.5;
+}
+
+/* =====================================
+   TÍTULOS
+===================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+/* =====================================
+   TAMANHOS DOS TÍTULOS
+===================================== */
+
+h1{
+    font-size: 2.5rem;
+}
+
+h2{
+    font-size: 2rem;
+}
+
+h3{
+    font-size: 1.75rem;
+}
+
+h4{
+    font-size: 1.5rem;
+}
+
+h5{
+    font-size: 1.25rem;
+}
+
+h6{
+    font-size: 1rem;
+}
+
+/* =====================================
+   PARÁGRAFOS
+===================================== */
+
+p{
+    color:
+        var(--text-muted);
+
+    margin-bottom:
+        1rem;
+}
+
+/* =====================================
+   LINKS
+===================================== */
+
+a{
+    color:
+        var(--primary);
+
+    transition:
+        var(--transition);
+}
+
+a:hover{
+    color:
+        var(--primary-hover);
+}
+
+/* =====================================
+   LABELS
+===================================== */
+
+label{
+    display: block;
+
+    margin-bottom: .5rem;
+
+    font-weight: 600;
+}
+
+/* =====================================
+   CAMPOS DE FORMULÁRIO
+===================================== */
+
+input,
+select,
+textarea{
+
+    width: 100%;
+
+    padding: .85rem 1rem;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--bg-secondary);
+
+    color:
+        var(--text);
+
+    transition:
+        var(--transition);
+}
+
+/* =====================================
+   PLACEHOLDER
+===================================== */
+
+input::placeholder,
+textarea::placeholder{
+
+    color:
+        var(--text-muted);
+}
+
+/* =====================================
+   FOCUS
+===================================== */
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline: none;
+
+    border-color:
+        var(--primary);
+
+    box-shadow:
+        0 0 0 4px rgba(59,130,246,.25);
+}
+
+/* =====================================
+   TEXTAREA
+===================================== */
+
+textarea{
+    resize: vertical;
+    min-height: 120px;
+}

@@ -1,31 +1,95 @@
-:root{
-    --bg: #0A1F44;
-    --bg-card: rgba(255,255,255,0.08);
-    --border: rgba(255,255,255,0.15);
+/* =====================================
+   CONTAINER
+===================================== */
 
-    --primary: #4DA3FF;
-    --primary-hover: #8CC5FF;
-
-    --text: #E3E6EB;
-    --muted: #AAB2C5;
-
-    --success: #00E676;
-    --danger: #FF5252;
-    --warning: #FFC107;
-
-    --radius: 12px;
+.container{
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-body {
-    background: radial-gradient(circle at top, #112b5c, #050d1f);
-    color: var(--text);
-    min-height: 100vh;
+/* =====================================
+   SECTIONS
+===================================== */
+
+.section{
+    padding:
+         2rem 0;
 }
 
-.card, .container {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+/* =====================================
+   FLEX
+===================================== */
+
+.flex{
+    display: flex;
+}
+
+.flex-center{
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+.flex-between{
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+/* =====================================
+   GRID GENÉRICO
+===================================== */
+
+.grid{
+
+    display: grid;
+
+    gap: 1.5rem;
+}
+
+/* =====================================
+   GRID DE PRODUTOS
+===================================== */
+
+.grid-produtos{
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(
+                280px,
+                1fr
+            )
+        );
+
+    gap: 1.5rem;
+}
+
+/* =====================================
+   PAGE HEADER
+===================================== */
+
+.page-header{
+
+    margin-bottom:
+        2rem;
+}
+
+/* =====================================
+   CENTRALIZAÇÃO VERTICAL
+===================================== */
+
+.full-height{
+
+    min-height:
+        100vh;
 }

@@ -41,10 +41,13 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Meus Produtos</title>
-    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages/lista_produtos.css">
 </head>
 <body>
 <?php
@@ -53,57 +56,153 @@ if(isset($_GET['mensagem'])){//Verifica se existe na URL um parâmetro chamado m
 }
 ?>
 
-<h2>Meus Produtos</h2>
+<div class="lista-produtos-page">
 
-<a href="cadastro_produto.php">+ Adicionar Novo Produto</a>
-<a href="painel_vendedor.php">Voltar para o painel</a><br><br>
+    <div class="page-header">
+        <h1>Meus Produtos</h1>
 
-<form action="" method="get"><!--Formulário que envia dados pela URL (GET)|| action"" =envia pra própia página-->
-<!-- name="busca": Define o nome do dado || value: mantém o texto digitando após buscar -->
-    <input type="text" name="busca" placeholder="Buscar produto..." 
-    value="<?php echo isset($_GET['busca']) ? $_GET['busca'] : '';?>">
-    <input type="submit" value="Buscar">
-</form>
+        <div class="header-actions">
+            <a href="cadastro_produto.php" class="btn btn-primary">
+                + Novo Produto
+            </a>
 
-<!-- Começo da tabela-->
- <table border="1" cellpadding="10"><!--Cria tabela com borda-->
-    <tr><!--Cria uma linha-->
-        <th>ID</th><!--Cabeçalho de cada coluna(ID, Nome..)-->
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th>Preço</th>
-        <th>Imagem</th>
-        <th>Ações</th>
-    </tr>
+            <a href="painel_vendedor.php" class="btn btn-secondary">
+                Voltar
+            </a>
+        </div>
+    </div>
 
-<?php
-//Percorre todos os produtos e gera as linhas da tabela
-if(count($produtos) > 0){//num_rows: quantidade de linhas retornas pela coluna
-   //Enquanto houver produtos, ele pega cada um.
-    foreach ($produtos as $produto){//fetch_assoc():Transforma cada linha em um ARRAY ASSOCIATIVO, onde os índices são os nomes do campos do banco
-        echo "<tr>";
-        echo "<td>".$produto['id']."</td>";//<td> Cria cada célula na linha
-        echo "<td>".$produto['nome']. "</td>";//valor da coluna nome daquele produto
-        echo "<td>".$produto['descricao']. "</td>";
-        echo "<td>R$". number_format($produto['preco'], 2, ',', '.')."</td>";
-                        //2 duas casas decimais|,separador decimal|.separador de milhar
-        if($produto['imagem'] != ''){
-        echo "<td><img src='".$produto['imagem']."' width='100'></td>";//Exibe a imagem do produto na tabela, redimensionadoo para largura 100px
-        }else{
-            echo "<td>Sem Imagem</td>";
-        }
-        //Botões de editar e excluir, passando o ID do produto na URL
-        echo "<td>
-                <a href='editar_produto.php?id=".$produto['id']."'>Editar</a> 
-                <a href='excluir_produto.php?id=".$produto['id']."' onclick=\"return confirm('Tem certeza que deseja excluir?');\">Excluir</a>
-             </td>";
-        echo "</tr>";
-    }
-}else{
-    echo "<tr><td colspan='6'>Nenhum produto cadastrado ainda.</td>";
-}
-?>
-</table>
+    <form class="busca-form" method="get">
 
+        <input
+            type="text"
+            name="busca"
+            placeholder="Buscar produto..."
+            value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>"
+        >
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Buscar
+        </button>
+
+    </form>
+
+    <div class="table-container">
+
+        <table class="produtos-table">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php if(count($produtos) > 0){ ?>
+
+                    <?php foreach($produtos as $produto){ ?>
+
+                        <tr>
+
+                            <td>
+                                <?= $produto['id'] ?>
+                            </td>
+
+                            <td>
+
+                                <?php if(!empty($produto['imagem'])){ ?>
+
+                                    <img
+                                        src="<?= htmlspecialchars($produto['imagem']) ?>"
+                                        class="produto-thumb"
+                                        alt="<?= htmlspecialchars($produto['nome']) ?>"
+                                    >
+
+                                <?php }else{ ?>
+
+                                    <span class="sem-imagem">
+                                        Sem imagem
+                                    </span>
+
+                                <?php } ?>
+
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($produto['nome']) ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($produto['descricao']) ?>
+                            </td>
+
+                            <td class="preco">
+
+                                R$
+
+                                <?= number_format(
+                                    $produto['preco'],
+                                    2,
+                                    ',',
+                                    '.'
+                                ) ?>
+
+                            </td>
+
+                            <td>
+
+                                <div class="acoes">
+
+                                    <a
+                                        href="editar_produto.php?id=<?= $produto['id'] ?>"
+                                        class="btn btn-primary"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <a
+                                        href="excluir_produto.php?id=<?= $produto['id'] ?>"
+                                        class="btn btn-danger"
+                                        onclick="return confirm('Tem certeza que deseja excluir?');"
+                                    >
+                                        Excluir
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    <?php } ?>
+
+                <?php }else{ ?>
+
+                    <tr>
+                        <td colspan="6">
+
+                            Nenhum produto cadastrado.
+
+                        </td>
+                    </tr>
+
+                <?php } ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 </body>
 </html>

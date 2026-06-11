@@ -44,49 +44,118 @@ $vendas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Vendas</title>
-    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages/ver_vendas_lojista.css">
 </head>
 <body>
-    <div id="toast"></div>
-<!-- TABELA -->
-<table border="1">
-    <tr>
-        <th>Pedido</th>
-        <th>Data</th>
-        <th>Cliente</th>
-        <th>Produto</th>
-        <th>Qtd</th>
-        <th>Preço</th>
-        <th>Status</th>
-        <th>Ação</th>
-    </tr>
+<div class="vendas-page">
 
-    <?php
-    foreach($vendas as $row){
-        echo "
-            <tr id='linha-{$row['id_item']}'>
-                <td>{$row['pedido_id']}</td>
-                <td>{$row['data']}</td>
-                <td>{$row['cliente']}</td>
-                <td>{$row['produto']}</td>
-                <td>{$row['quantidade']}</td>
-                <td>R$ ".number_format($row['preco'],2,',','.')."</td>
-                <td id='status-{$row['id_item']}' class='status {$row['status_item']}'>
-                    {$row['status_item']}
-                </td>
-                <td>
-                    <button class='aprovar' data-id='{$row['id_item']}'>Aprovar</button>
-                    <button class='cancelar' data-id='{$row['id_item']}'>Cancelar</button>
-                    <button class='enviar' data-id='{$row['id_item']}'>Enviar</button>
-                </td>
-            </tr>
-        ";
-    }
-    ?>
-</table>
+    <div class="page-header">
+
+        <h1>Pedidos Recebidos</h1>
+
+        <a
+            href="painel_vendedor.php"
+            class="btn btn-secondary"
+        >
+            Voltar
+        </a>
+
+    </div>
+
+    <div id="toast"></div>
+
+    <div class="table-container">
+        <table class="vendas-table">
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <th>Preço</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <?php foreach($vendas as $row){ ?>
+
+                    <tr id="linha-<?= $row['id_item'] ?>">
+
+                        <td>
+                            #<?= $row['pedido_id'] ?>
+                        </td>
+
+                        <td>
+                            <?= $row['data'] ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($row['cliente']) ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($row['produto']) ?>
+                        </td>
+
+                        <td>
+                            <?= $row['quantidade'] ?>
+                        </td>
+
+                        <td>
+                            R$
+                            <?= number_format($row['preco'],2,',','.') ?>
+                        </td>
+
+                        <td>
+                            <span
+                                id="status-<?= $row['id_item'] ?>"
+                                class="status-badge status-<?= $row['status_item'] ?>"
+                            >
+                                <?= $row['status_item'] ?>
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="acoes">
+                                <button
+                                    class="btn btn-success aprovar"
+                                    data-id="<?= $row['id_item'] ?>"
+                                >
+                                    Aprovar
+                                </button>
+
+                                <button
+                                    class="btn btn-danger cancelar"
+                                    data-id="<?= $row['id_item'] ?>"
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button
+                                    class="btn btn-primary enviar"
+                                    data-id="<?= $row['id_item'] ?>"
+                                >
+                                    Enviar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 <script>
 
 function atualizarStatus(botao, novoStatus){
@@ -111,9 +180,9 @@ function atualizarStatus(botao, novoStatus){
             el.innerText = novoStatus;
             
             //remove classes antigas
-            el.classList.remove("aprovado", "cancelado", "enviado");
+            el.classList.remove("status-pendente", "status-aprovado", "status-cancelado", "status-enviado");
             //adiciona nova classe
-            el.classList.add(novoStatus);
+            el.classList.add("status-" + novoStatus);
 
             mostrarToast("Status atualizado!");
 

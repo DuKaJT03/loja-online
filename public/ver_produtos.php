@@ -41,69 +41,134 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Loja - Ver Produtos</title>
-    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages/produtos.css">
     <script src="js/carrinho.js?v=2"></script>
 </head>
 <body>
 
-<h2>Produtos Disponíveis</h2>
+<div class="produtos-page">
+    <div class="produtos-header">
+        <h1>Produtos Disponíveis</h1>
+        <a
+            href="painel_cliente.php"
+            class="btn btn-secondary"
+        >
+            Voltar ao Painel
+        </a>
+    </div>
 
-<a href="painel_cliente.php">Voltar para o painel</a><br><br>
+    <form
+        method="get"
+        class="filtro-form"
+    >
 
-<form method="get">
-    <select name="categoria">
-        <option value="">Todas as categorias</option>
-        <option value="camiseta">Camiseta</option>
-        <option value="calca">Calça</option>
-        <option value="tenis">Tênis</option>
-    </select>
-    <input type="submit" value="Filtrar">
-</form>
+        <select name="categoria">
 
-<table border="1" cellpadding="10"> <!--cellpadding="10" : espaçamento interno nas células -->
-    <tr> <!--Linnha da tabela-->
-        <th>Imagem</th>
-        <th>Nome</th><!--Cabeçalho da tebela-->
-        <th>Descrição</th>
-        <th>Preço</th>
-        <th>Estoque</th>
-        <th>Ações</th>
-    </tr>
+            <option value="">
+                Todas as categorias
+            </option>
 
-<?php //Listagem
-if(count($produtos) > 0){ //Conta quantas linhas vieram do banco
-    foreach($produtos as $produto){
-        echo "<tr>"; //Começa uma linha da tabela
+            <option value="camiseta">
+                Camiseta
+            </option>
 
-        //Coluna da imagem
-        if($produto['imagem'] != ''){
-            echo "<td><img src='".$produto['imagem']."' width='100'></td>";
-        } else {
-            echo "<td>Sem imagem</td>";
-        }
-        //outras colunas 
-        echo "<td>".$produto['nome']."</td>";
-        echo "<td>".$produto['descricao']."</td>";
-        echo "<td>R$ ".number_format($produto['preco'], 2, ',', '.')."</td>";
-        echo "<td>".$produto['estoque']."</td>";
+            <option value="calca">
+                Calça
+            </option>
 
-        //Botão de adicionar no carrinho 
-        echo "<td>
-                <button class='add_carrinho' data-id='".$produto['id']."'>Adicionar ao Carrinho</button>
-             </td>";
+            <option value="tenis">
+                Tênis
+            </option>
 
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='6'>Nenhum produto cadastrado.</td></tr>";
-}
-?>
+        </select>
 
-</table>
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Filtrar
+        </button>
 
+    </form>
+
+    <div class="produtos-grid">
+
+        <?php if(count($produtos) > 0){ ?>
+
+            <?php foreach($produtos as $produto){ ?>
+
+                <div class="produto-card">
+
+                    <div class="produto-imagem">
+
+                        <?php if(!empty($produto['imagem'])){ ?>
+                        
+                            <img
+                                src="<?= htmlspecialchars($produto['imagem']) ?>"
+                                alt="<?= htmlspecialchars($produto['nome']) ?>"
+                            >
+
+                        <?php } else { ?>
+
+                            <div class="sem-imagem">
+                                Sem imagem
+                            </div>
+
+                        <?php } ?>
+
+                    </div>
+
+                    <div class="produto-info">
+
+                        <h3>
+                            <?= htmlspecialchars($produto['nome']) ?>
+                        </h3>
+
+                        <p class="produto-descricao">
+                            <?= htmlspecialchars($produto['descricao']) ?>
+                        </p>
+
+                        <p class="produto-preco">
+                            R$
+                            <?= number_format(
+                                $produto['preco'],
+                                2,
+                                ',',
+                                '.'
+                            ) ?>
+                        </p>
+
+                        <p class="produto-estoque">
+                            Estoque:
+                            <?= $produto['estoque'] ?>
+                        </p>
+
+                        <button
+                            class="btn btn-primary add_carrinho"
+                            data-id="<?= $produto['id'] ?>"
+                        >
+                            Adicionar ao Carrinho
+                        </button>
+
+                    </div>
+
+                </div>
+
+            <?php } ?>
+
+        <?php } else { ?>
+            <p>
+                Nenhum produto encontrado.
+            </p>
+        <?php } ?>
+    </div>
+</div>
 </body>
 </html>
 

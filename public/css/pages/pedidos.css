@@ -1,0 +1,149 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.pedidos-page{
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.page-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.page-header h1{
+    margin: 0;
+}
+
+/* =====================================
+   TABELA
+===================================== */
+.table-container{
+    width: 100%;
+    overflow-x: auto;
+
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.pedidos-table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* =====================================
+   CABEÇALHO TABELA
+===================================== */
+
+.pedidos-table thead{
+    background: rgba(255,255,255,.05);
+}
+
+.pedidos-table th{
+    text-align: center;
+    padding: 1rem;
+    font-weight: 600;
+}
+
+/* =====================================
+   LINHAS
+===================================== */
+
+.pedidos-table td{
+    padding: 1rem;
+    border-top: 1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+}
+
+.pedidos-table td:last-child{
+    width: 150px;
+}
+
+.pedidos-table tbody tr{
+    transition: var(--transition);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+
+.pedidos-table tbody tr:hover{
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .03
+        );
+}
+
+/* =====================================
+   STATUS
+===================================== */
+
+.status-badge{
+    display: inline-block;
+    padding:.4rem .8rem;
+    border-radius:999px;
+    font-size:.85rem;
+    font-weight:600;
+    background:rgba(59,130,246,.15);
+    color: var(--primary);
+}
+
+.status-pendente{
+    background: rgba(245,158,11,.15);
+    color: #F59E0B;
+}
+
+.status-aprovado{
+    background: rgba(34,197,94,.15);
+    color: #22C55E;
+}
+
+.status-enviado{
+    background: rgba(59,130,246,.15);
+    color: #3B82F6;
+}
+
+.status-cancelado{
+    background: rgba(239,68,68,.15);
+    color: #EF4444;
+}
+
+.status-entregue{
+    background: rgba(16,185,129,.15);
+    color: #10B981;
+}
+
+/*RESPONSIVIDADE*/
+@media (max-width: 768px){
+
+    .table-container{
+        overflow-x: auto;
+    }
+
+    .pedidos-table{
+        min-width: 700px;
+    }
+
+    .page-header{
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

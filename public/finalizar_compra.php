@@ -106,9 +106,9 @@ try {
     //Limpa carrinho
     unset($_SESSION['carrinho']);
 
-    echo "<p style='color:green;'>Compra finaliza com sucesso! Pedido nº {$id_pedido}</p>";
-    echo "<a href='ver_produtos.php'>Continuar comprando</a> |
-        <a href='painel_cliente.php'>Voltar ao painel</a>";
+    $_SESSION['sucesso']= "Compra finalizada com sucesso! Pedido nº {$id_pedido}";
+    header('Location: ver_pedidos.php');
+    exit;
 
 }catch (Exception $e){
     

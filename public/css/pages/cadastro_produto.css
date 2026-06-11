@@ -1,0 +1,92 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.cadastro-produto-page{
+    padding: 2rem;
+}
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.produto-form-container{
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.page-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.page-header h1{
+    margin: 0;
+}
+
+/* =====================================
+   FORMULÁRIO
+===================================== */
+
+.produto-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* =====================================
+   GRUPOS
+===================================== */
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+/* =====================================
+   TEXTAREA
+===================================== */
+
+.produto-form textarea{
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* =====================================
+   BOTÃO
+===================================== */
+
+.produto-form .btn{
+    width: 100%;
+}
+
+/* =====================================
+   RESPONSIVO
+===================================== */
+
+@media (max-width: 768px){
+    .produto-form-container{
+        padding: 1.5rem;
+    }
+    .page-header{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .page-header .btn{
+        width: 100%;
+    }
+
+}

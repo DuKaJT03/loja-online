@@ -51,9 +51,12 @@ if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0){
         mkdir($pasta, 0755);// se não existirm cria com permissão 0755(padrão para leitura e escrita)
     }
 
-    $nome_arquivo = basename($_FILES['imagem']['name']);//besename(): Remove possíveis caminhos do arquivo, pegando só o nome.
-    //cria um nome único pro arquivo, juntando $pasta=imagens/
-    $caminho_arquivo = $pasta . time() .'_' .$nome_arquivo; //nome do arquivo original(Exemplo:imagens/1717000000_camisa.png)
+    $extensao =pathinfo(
+        $_FILES['imagem']['name'],
+        PATHINFO_EXTENSION
+    );
+    $nome_arquivo = uniqid() . '.' . $extensao;
+    $caminho_arquivo = $pasta .$nome_arquivo; //nome do arquivo original(Exemplo:imagens/1717000000_camisa.png)
              //time(): pega o timestamp atual(número único)pra não sobreescrever.|| '_' :Só pra separar
 
     if(move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_arquivo)){// move_uploaded_file() → Move o arquivo da pasta temporária para a pasta imagens/.

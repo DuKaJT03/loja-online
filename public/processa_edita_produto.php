@@ -117,11 +117,15 @@ if(//verifica se todos os campos vierom no formulário
     $stmt->bindValue(':lojista', $_SESSION['usuario_id'], PDO::PARAM_INT);
 
     if($stmt->execute()){
-        echo "<p style='color:green;'>Produto atualizado com sucesso!</p>";
-        echo "<a href='lista_produtos.php'>Voltar</a>";
+        header(
+            "Location: lista_produtos.php?mensagem=" . urlencode("Produto atualizado com sucesso!")
+        );
+        exit;
     } else {
-        echo "<p style='color:red;'>Erro ao atualizar.</p>";
-        echo "<a href='lista_produtos.php'>Voltar</a>";
+        header(
+            "Location: lista_produtos.php?mensagem=". urlencode("Erro ao atualizar produto.")
+        );
+        exit;
     }
 
 }else{

@@ -44,38 +44,160 @@ if(!$produto){
 <head>
     <meta charset="UTF-8">
     <title>Produto</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages/editar_produto.css">
 </head>
 <body>
 
-<h2>Editar Produto</h2>
-                                    <!--METHOD:dados vão ocultos no corpo da requisição-->
-<form action="processa_edita_produto.php" method="post" enctype="multipart/form-data"><!--ENCTYPE: permite envio de arquivos(imagem)-->
-    <input type="hidden" name="id" value="<?php echo $produto['id']; ?>"><!--Esse ID é essencial pro processador saber qual produto atualizar-->
+<div class="editar-produto-page">
 
-    <label>Nome:</label>
-    <input type="text" name="nome" value="<?php  echo htmlspecialchars($produto['nome']); ?>" required><br><br><!--HTMLSPECIALCHARS(): Protege contra XSS(inserção de códigos maliciosos)-->
+    <div class="page-header">
 
-    <label>Descrição:</label>
-    <textarea name="descricao" required><?php echo htmlspecialchars($produto['descricao']); ?></textarea><br><br><!--Carrega a descrição atual dentro da <textarea>-->
+        <h1>Editar Produto</h1>
 
-    <label>Preço</label><!--step:permite valores com 2 casas decimais 9.99-->
-    <input type="number" step="0.01" name="preco" value="<?php echo $produto['preco']; ?>" required><br><br>
+        <a
+            href="lista_produtos.php"
+            class="btn btn-secondary"
+        >
+            Voltar
+        </a>
 
-    <label>Imagem Atual</label><br><!--Se não enviar, mantém a imagem antiga-->
-    <img src="<?php echo $produto['imagem']; ?>" width="150"><br><br>
+    </div>
 
-    <label>Trocar imagem (opcional):</label>
-    <input type="file" name="imagem"><br><br>
+    <div class="form-card">
 
-    <label>Estoque: </label>
-    <input type="number" name="estoque" value="<?php  echo $produto ['estoque']; ?>" required><br><br>
+        <form
+            action="processa_edita_produto.php"
+            method="POST"
+            enctype="multipart/form-data"
+            class="produto-form"
+        >
 
-    <input type="submit" value="Salvar Alterações">
-</form>
+            <input
+                type="hidden"
+                name="id"
+                value="<?= $produto['id']; ?>"
+            >
 
-<br>
-<a href="lista_produtos.php">Voltar</a>
-    
+            <div class="form-group">
+
+                <label for="nome">
+                    Nome
+                </label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value="<?= htmlspecialchars($produto['nome']); ?>"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="descricao">
+                    Descrição
+                </label>
+
+                <textarea
+                    id="descricao"
+                    name="descricao"
+                    rows="5"
+                    required
+                ><?= htmlspecialchars($produto['descricao']); ?></textarea>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="preco">
+                    Preço
+                </label>
+
+                <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    step="0.01"
+                    value="<?= $produto['preco']; ?>"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Imagem Atual
+                </label>
+
+                <?php if(!empty($produto['imagem'])){ ?>
+
+                    <img
+                        src="<?= htmlspecialchars($produto['imagem']); ?>"
+                        alt="Produto"
+                        class="preview-image"
+                    >
+
+                <?php }else{ ?>
+
+                    <div class="sem-imagem">
+                        Sem imagem cadastrada
+                    </div>
+
+                <?php } ?>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="imagem">
+                    Nova Imagem (opcional)
+                </label>
+
+                <input
+                    type="file"
+                    id="imagem"
+                    name="imagem"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="estoque">
+                    Estoque
+                </label>
+
+                <input
+                    type="number"
+                    id="estoque"
+                    name="estoque"
+                    value="<?= $produto['estoque']; ?>"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Salvar Alterações
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
 </body>
 </html>

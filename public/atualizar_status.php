@@ -35,4 +35,19 @@ $stmt->bindValue(':id_lojista', $id_lojista, PDO::PARAM_INT);
 
 $stmt->execute();
 
+$stmtPedido = $pdo->prepare(
+    "UPDATE pedidos
+     SET status = :status
+     WHERE id = (
+        SELECT id_pedido
+        FROM itens_pedido
+        WHERE id = :id_item
+     )"
+);
+
+$stmtPedido->bindValue(':status', $status);
+$stmtPedido->bindValue(':id_item', $id_item, PDO::PARAM_INT);
+
+$stmtPedido->execute();
+
 echo "ok";

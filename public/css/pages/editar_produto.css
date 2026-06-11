@@ -1,0 +1,117 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.editar-produto-page{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.page-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+/* =====================================
+   CARD
+===================================== */
+
+.form-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+/* =====================================
+   FORM
+===================================== */
+
+.produto-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* =====================================
+   CAMPOS
+===================================== */
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.form-group label{
+    font-weight: 600;
+}
+
+/* =====================================
+   INPUTS
+===================================== */
+
+.form-group input,
+.form-group textarea{
+    width: 100%;
+}
+
+/* =====================================
+   PREVIEW IMAGEM
+===================================== */
+
+.preview-image{
+    width: 220px;
+    max-width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+/* =====================================
+   SEM IMAGEM
+===================================== */
+
+.sem-imagem{
+    width: 220px;
+    height: 220px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px dashed var(--border);
+
+    border-radius: var(--radius-md);
+
+    color: var(--text-muted);
+}
+
+/* =====================================
+   BOTÃO
+===================================== */
+
+.produto-form .btn{
+    margin-top: 1rem;
+}
+
+/* =====================================
+   RESPONSIVO
+===================================== */
+
+@media (max-width: 768px){
+
+    .page-header{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+}

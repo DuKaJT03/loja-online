@@ -1,6 +1,70 @@
-/* RESET GLOBAL - Deixa tudo padrão entre os navegadores */
-* {
+/* =====================================
+   RESET GLOBAL
+===================================== */
+
+*,
+*::before,
+*::after{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* =====================================
+   HTML E BODY
+===================================== */
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    min-height: 100vh;
+}
+
+/* =====================================
+   IMAGENS
+===================================== */
+
+img{
+    display: block;
+    max-width: 100%;
+}
+
+/* =====================================
+   LINKS
+===================================== */
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+/* =====================================
+   LISTAS
+===================================== */
+
+ul,
+ol{
+    list-style: none;
+}
+
+/* =====================================
+   FORMULÁRIOS
+===================================== */
+
+button,
+input,
+textarea,
+select{
+    font: inherit;
+}
+
+/* =====================================
+   TABELAS
+===================================== */
+
+table{
+    border-collapse: collapse;
+    border-spacing: 0;
 }

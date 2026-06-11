@@ -33,45 +33,93 @@ $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Meus Pedidos</title>
-    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages/pedidos.css">
 </head>
 <body>
 
-<h2>Meus Pedidos</h2>
-
-<a href="painel_cliente.php">Voltar para o painel</a><br><br>
+<div class="container pedidos-page">
+    <div class="page-hader">
+        <h1>Meus Pedidos</h1>
+        <a href="painel_cliente.php" class="btn btn-secondary">
+            Voltar ao Inicio
+        </a>
+    </div>
+</div>
 
 <?php
-if(count($pedidos) > 0){
-    echo "<table border='1' cellpadding='10'>";
-    echo "<tr>
-            <th>ID do Pedido</th>
-            <th>Data</th>
-            <th>Total</th>
-            <th>Ações</th>
-            <th>Ações</th>
-         </tr>";
+    if(count($pedidos)>0){
+?>
+<div class="table-container">
+    <table class="pedidos-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
 
-    foreach($pedidos as $pedido){
-        echo "<tr>
-            <td>{$pedido['id']}</td>
-            <td>{$pedido['data']}</td>
-            <td>R$ ". number_format($pedido['total'], 2, ',', '.')."</td>
-            <td>{$pedido['status']}</td>
-            <td>
-                <a href='ver_itens_pedido.php?id={$pedido['id']}'>Ver Itens</a>
-            </td>
-        </tr>";
+        <tbody>
+            <?php foreach($pedidos as $pedido){ ?>
+                <tr>
+                    <td>
+                        <?= $pedido['id'] ?>
+                    </td>
+
+                    <td>
+                        <?= (new DateTime($pedido['data']))->format('d/m/y') ?>
+                    </td>
+
+                    <td>
+                        R$
+                        <?=number_format($pedido['total'],2,',','.')?>
+                    </td>
+
+                    <td>
+                        <?php $status = strtolower($pedido['status']); ?>
+                        <span class="status-badge status-<?= $status ?>">
+                            <?= htmlspecialchars($pedido['status']) ?>
+                        </span>
+                    </td>
+
+                    <td>
+                        <a href="ver_itens_pedido.php?id=<?= $pedido['id'] ?>"
+                            class="btn btn-primary">
+                            Ver Itens
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>    
+        </tbody>
+            <?php
+                if(isset($_SESSION['sucesso'])){
+            ?>
+
+                <div class="alert-success">
+                    <?= htmlspecialchars($_SESSION['sucesso']) ?>
+                </div>
+            <?php
+                unset($_SESSION['sucesso']);
+            }
+            ?>
+    </table>
+</div>
+<?php
+    }else{
+?>
+<p>
+    Você ainda não fez nenhum pedido.
+</p>
+<?php
     }
-
-    echo "</table>";
-}else{
-    echo "<p>Você ainda não fez nenhum pedido.</p>";
-}
-
 ?>
 
 </body>

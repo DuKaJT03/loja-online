@@ -28,23 +28,56 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !='lojista'){
 <head>
     <meta charset="UTF-8">
     <title>Painel do Vendedor</title>
-    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages/painel_vendedor.css">
 </head>
-<body>
-    <h1>Bem-vindo, Vendedor <?php echo $_SESSION['usuario_nome']; ?>!</h1>
 
-    <p style="color:green;">
-        <strong>Total de Produtos:</strong> <?php echo $total; ?>
-    </p>
-   
-    <ul>
-        <li><a href="cadastro_produto.php">Cadastrar Produto</a></li>
-        <li><a href="lista_produtos.php">Meus Produtos</a></li>
-        <li><a href="ver_vendas_lojista.php">Pedidos</a></li>
-        <li><a href="logout.php">Sair</a></li>
-    </ul>
-</body>
+    <div class="painel-page">
+        <div class="painel-header">
+            <h1>
+                Painel do Vendedor
+            </h1>
+
+            <a href="logout.php" class="btn btn-danger">
+                Sair
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h2>
+                Total de Produtos
+            </h2>
+
+            <span class="dashboard-number">
+                <?= $total ?>
+            </span>
+        </div>
+
+        <div class="menu-grid">
+            <a href="cadastro_produto.php" class="menu-card">
+                <h3>Cadastrar Produto</h3>
+                <p>
+                    Adicione novos produtos à loja.
+                </p>
+            </a>
+
+            <a href="lista_produtos.php" class="menu-card">
+                <h3>Meus Produtos</h3>
+                <p>
+                    Gerencie seu catálogo.
+                </p>
+            </a>
+
+            <a href="ver_vendas_lojista.php" class="menu-card">
+                <h3>Pedidos</h3>
+                <p>Visualize as vendas realizadas.</p>
+            </a>
+        </div>
+    </div>
+
 </html>

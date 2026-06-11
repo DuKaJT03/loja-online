@@ -1,0 +1,95 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.painel-page{
+    padding: 2rem;
+}
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.painel-header{
+    margin-bottom: 3rem;
+}
+
+.painel-header h1{
+
+    margin-bottom: .5rem;
+}
+
+/* =====================================
+   GRID
+===================================== */
+
+.painel-grid{
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                250px,
+                1fr
+            )
+        );
+
+    gap: 2rem;
+}
+
+/* =====================================
+   CARD
+===================================== */
+
+.painel-card{
+
+    background:
+        var(--bg-card);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    padding: 2rem;
+
+    text-align: center;
+
+    transition:
+        var(--transition);
+
+    box-shadow:
+        var(--shadow-md);
+}
+
+.painel-card:hover{
+
+    transform:
+        translateY(-6px);
+
+    box-shadow:
+        var(--shadow-lg);
+}
+
+/* =====================================
+   ÍCONE
+===================================== */
+
+.painel-icon{
+
+    font-size: 3rem;
+
+    margin-bottom: 1rem;
+}
+
+/* =====================================
+   TÍTULO
+===================================== */
+
+.painel-card h3{
+
+    margin-bottom: .75rem;
+}

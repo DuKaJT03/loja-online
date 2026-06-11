@@ -43,10 +43,15 @@ if(isset($_GET['id'])){//Verifica se foi passado o parâmetro id pela URL, exemp
         $stmt_delete->bindValue(':lojista', $lojista_id, PDO::PARAM_INT);
 
         if($stmt_delete->execute()){
-            echo "Produto excluido com sucesso!";
-            echo "<br><a href='lista_produtos.php'>Voltar para lista de produtos</a>";
+            header(
+                "Location: lista_produtos.php?mensagem=" . urlencode("Produto excluido com sucesso!")
+            );
+            exit;
         }else{
-            echo "Erro ao Excluir: ";
+            header(
+                "Location: lista_produtos.php?mensagem=" . urlencode("Erro ao excluir")
+            );
+            exit;
         }
     }else{
         echo "Produto não encontrado ou você não tem permissão para excluir.";
