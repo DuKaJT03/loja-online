@@ -48,6 +48,8 @@ use Jhon\Loja\Database\Conexao;
 
         $stmt->execute();
 
-        echo "<p style='color:green;'>Usuário cadastrado com sucesso!</p>";
-        echo "<a href='login.html'>Ir para o Login</a>";
+        header('Location: login.html?Usuario Cadastrado com sucesso');
+        exit;
+        // echo "<p style='color:green;'>Usuário cadastrado com sucesso!</p>";
+        //echo "<a href='login.html'>Ir para o Login</a>";
     }
