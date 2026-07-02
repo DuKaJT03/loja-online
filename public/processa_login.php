@@ -45,10 +45,12 @@ if(isset($_POST['email'], $_POST['senha'])){ //verifica se os campos email e sen
             exit;
         }
     }else{
-        echo"Email não encontrado.";
+        header ('Location: login.html?erro=email');
+        exit;
     }
 }else{
-    echo"Preencha todos os campos.";
+    header('Location: login.html?erro=Preencha todos os campos');
+    exit;
 }
 
 ?>
