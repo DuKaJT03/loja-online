@@ -9,10 +9,10 @@ class Conexao {
     
     public static function conectar() {
 
-        $host = "dpg-d8fihlc2m8qs73eb7ts0-a.ohio-postgres.render.com";
-        $db   = "loja_db_u3ha";
-        $user = "loja_db_u3ha_user";
-        $pass = "JpWJmCN7fIY6SUH3Ftv8fAmjn5sgcYmE";
+        $host = "dpg-d935n0vaqgkc739405og-a.ohio-postgres.render.com";
+        $db   = "loja_db_m0sr";
+        $user = "loja_db_m0sr_user";
+        $pass = "aq4NDLFITn0UqqXyR7zspjiG0BS10gEC";
         $port = "5432";
 
         $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
